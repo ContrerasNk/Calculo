@@ -1,0 +1,179 @@
+---
+title: <center> <h1> **Tarea Intervalos** </h1> </center>
+author: <center> <h2> *Julio Cesar Contreras* </h2> </center>
+date: "***`r format(Sys.time(), '%B %d, %Y')`***"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 5
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r eval=TRUE, echo=FALSE, message=FALSE}
+# tengo que tener mi path de mi python (variable de entorno)
+# tengo que conectar mi reticulate con python (el de la varible de entorno)
+# ahi recien podré usar mi pip del python
+# en mi caso tengo el python unido al miniconda
+# Eliminamos el reticulate e instalamos de nuevo
+# SIEMPRE CORRER ESTAS LINEAS
+Sys.setenv(RETICULATE_PYTHON = "C:/Users/Contreras/miniconda3/python.exe") # antes que todo
+library(reticulate)
+# py_config() # rutas
+# py_install("sympy") # or en el terminal pip install sympy numpy pandas
+```
+# **Librarías**
+
+Citando los códigos de [inecuaciones](https://colab.research.google.com/github/crdguez/aprendiendo_sympy/blob/master/inecuaciones.ipynb#scrollTo=iW7rNRG2PMFC)
+
+```{python, message=FALSE}
+from sympy import *
+from sympy.plotting import plot_implicit
+from sympy.solvers.inequalities import solve_univariate_inequality, reduce_rational_inequalities, reduce_abs_inequality, reduce_abs_inequalities
+from sympy.parsing.latex import parse_latex
+
+x, y, z, t = symbols('x y z t')
+k, m, n = symbols('k m n', integer=True)
+f, g, h = symbols('f g h', cls=Function)
+init_printing(use_latex=True)
+```
+
+```{python message = F, comment = '', echo = FALSE}
+plot_implicit(abs(x - 1) < 3, (x, -4, 6), line_color='cyan') # este grafico no se mostrara
+```
+
+# **1. Resuelve las siguientes inecuaciones:**
+
+
+```{r echo = FALSE, fig.align='center', comment = ''}
+knitr::include_graphics('img/TIntervalos1.jpg')
+```
+
+## **a) $|x−1|<3$**
+
+```{python message = F, comment = ''}
+solve_univariate_inequality(abs(x - 1) < 3, x, relational = False)
+```
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(abs(x - 1) < 3, (x, -4, 6), line_color='cyan')
+```
+
+
+## **b) $|2−3x|<1$**
+
+
+```{python message = F, comment = ''}
+solve_univariate_inequality(abs(2 - 3 * x) < 1, x, relational = False)
+```
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(abs(2 - 3 * x) < 1, (x, -2, 3), line_color='cyan')
+```
+
+## **c) $|x−2|>3$**
+
+
+```{python message = F, comment = ''}
+solve_univariate_inequality(abs(x - 2) > 3, x, relational = False)
+```
+
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(abs(x - 2) > 3, (x, -3, 7), line_color='cyan')
+```
+
+# **2. Resuelve analíticamente y gráficamente las siguientes inecuaciones**
+
+## **a)$|5−\frac{1}{x}|< 1$**
+
+```{python message = F, comment = ''}
+solve_univariate_inequality(abs(5 - 1/x) < 1, x, relational = False)
+```
+
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(abs(5 - 1/x) < 1, (x, 1/8, 1/3), line_color='cyan')
+```
+
+## **b) $|x^2−2| \le 2$**
+
+```{python message = F, comment = ''}
+solve_univariate_inequality(abs(x**2 - 2) <= 2, x, relational = False)
+```
+
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(abs(x**2 - 2) <= 2, (x, -3, 3), line_color='cyan')
+```
+
+# **3. Resuelve analíticamente y gráficamente la inecuación**
+
+## **$|x-4| < |x+2|$**
+
+```{python message = F, comment = ''}
+solve_univariate_inequality(abs(x - 4) < abs(x + 2), x, relational = False)
+```
+
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(abs(x - 4) < abs(x + 2), (x, 0, 4), line_color='cyan')
+```
+
+# **4. Resuelve la siguiente inecuación**
+
+## **$x< x^2 - 12 < 3x$**
+
+```{python message = F, comment = ''}
+reduce_rational_inequalities([[x < x**2 - 12, x**2 - 12 < 3*x]], x, relational = False)
+```
+
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(And(x < x**2 - 12, x**2 - 12 < 3*x), (x, 0, 9), line_color='cyan')
+```
+
+# **5. Resuelve la siguiente inecuación**
+
+## **$0<|x-3|<\frac{1}{3}$**
+
+```{python message = F, comment = ''}
+print(solve_univariate_inequality(0 < abs(x - 3), x, relational = False), "&", solve_univariate_inequality(abs(x - 3) < 1/3, x, relational = False))
+```
+
+### ***Gráfico***
+
+```{python message = F, comment = ''}
+plot_implicit(And(0 < abs(x - 3), abs(x - 3) < 1/3), (x, 1, 4), line_color='cyan')
+```
+
+# **6. Resuelve la inecuación**
+
+## **$|x-2| + |x+2| \le 4$**
+
+```{python message = F, comment = '', warning = FALSE}
+reduce_abs_inequalities([(Abs(x - 2) + Abs(x + 2) - 4, '<=')], x)
+``` 
+
+### ***Gráfico***
+
+```{python message = F, comment = '', warning = FALSE}
+plot_implicit(abs(x - 2) + abs(x + 2) <= 4, (x, -3, 3), line_color='cyan')
+```
+
+
+
+
+
