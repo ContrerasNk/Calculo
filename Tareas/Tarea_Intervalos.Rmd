@@ -16,6 +16,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE}
+.rs.restartR()
 # tengo que tener mi path de mi python (variable de entorno)
 # tengo que conectar mi reticulate con python (el de la varible de entorno)
 # ahi recien podré usar mi pip del python
